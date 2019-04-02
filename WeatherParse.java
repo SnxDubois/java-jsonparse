@@ -23,24 +23,56 @@ public class WeatherParse {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        
+
         // TODO parser le fichier
+        JSONParser parser = new JSONParser();
+        Object jsonParsed = null;
+        try {
+            jsonParsed = parser.parse(jsonFile);
+        } catch (ParseException | IOException e) {
+            e.printStackTrace();
+        }
 
         // TODO récupérer la racine du document
+        JSONObject root = (JSONObject) jsonParsed;
 
         // TODO afficher la valeur de l'attribut "name" de la racine
+        String name = (String) root.get("name");
+        System.out.println("City name : " + name);
 
-        // TODO afficher les valeurs des attributs "lat" et "lon" de l'élément "coord" contenu dans la racine
+        // TODO afficher les valeurs des attributs "lat" et "lon" de l'élément "coord"
+        // contenu dans la racine
+        JSONObject coord = (JSONObject) root.get("coord");
+        double lat = (double) coord.get("lat");
+        double lon = (double) coord.get("lon");
+        System.out.println(String.valueOf("City latitude: " + lat));
+        System.out.println(String.valueOf("City longitude: " + lon));
 
-        // TODO parcourir tous les éléments de "weather" et afficher le contenu de "main"
+        // TODO parcourir tous les éléments de "weather" et afficher le contenu de
+        // "main"
+        JSONArray weather = (JSONArray) root.get("weather");
+        for (int i = 0; i < weather.size(); i++) {
+            JSONObject weatherList = (JSONObject) weather.get(i);
+            String main = (String) weatherList.get("main");
+            System.out.println("Weather: " + main);
 
-        /*
-            Résultat attendu :
-            * City name: London
-            * City latitude: 51.51
-            * City longitude: -0.13
-            * Weather: Drizzle
-            * Weather: Clear
-        */
+        }
     }
+
+    /*
+     * Résultat attendu : City name: London City latitude: 51.51 City longitude:
+     * -0.13 Weather: Drizzle Weather: Clear
+     * 
+     * Ajouter ou remplacer une valeur. jsonObject.put("attribute", value);
+     * 
+     * JSONArray friends = new JSONArray(); friends.add("Kenny McCormick");
+     * student.put("friends", friends); System.out.println(student.get("friends"));
+     * 
+     * try { // récupération du fichier en écriture FileWriter resultFile = new
+     * FileWriter("path/to/json/new/file.json"); // l'objet racine devient une
+     * chaîne de caractère String jsonToString = root.toString(); // on écrit la
+     * chaîne puis on ferme le fichier resultFile.write(jsonToString);
+     * resultFile.flush(); resultFile.close(); } catch (IOException e) {
+     * e.printStackTrace(); }
+     */
 }
